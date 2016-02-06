@@ -4,6 +4,18 @@ Reads the values from a0-a3 and writes them as binary to the serial interface.
 MIT LICENSE 2016
 */
 
+#define N 10
+
+typedef struct {
+	unsigned long time; // 32bit
+	int a0; // 16bit
+	int a1;
+	int a2;
+} __attribute__((__packed__)) Data;
+
+Data MESSAGES[N];
+size_t counter = 0;
+
 // the setup routine runs once when you press reset:
 void setup() {
   // initialize serial communication
@@ -23,17 +35,19 @@ void loop() {
   int a0 = analogRead(A0);
   int a1 = analogRead(A1);
   int a2 = analogRead(A2);
-  // int a3 = analogRead(A3);
-
-  // print out the value you read:
-  Serial.print(time);
-  Serial.print(", ");
-  Serial.print(a0);
-  Serial.print(", ");
-  Serial.print(a1);
-  Serial.print(", ");
-  Serial.print(a2);
-  Serial.print("\n");
-  //Serial.print(", ");
-  //Serial.println(a3);
+  
+  // create msg
+  Data msg = {time, a0, a1, a2};
+  
+  if (counter < N) {
+	  MESSAGES[counter] = msg;
+	  counter++;
+  }
+  
+  // send data over serial
+  if (counter == N) {
+	  counter = 0;
+	  Serial.write("SSSSSSSSSS"); // Start tag 32bit zeros
+	  Serial.write((uint8_t*) MESSAGES, N*sizeof(*MESSAGES));
+  }
 }
