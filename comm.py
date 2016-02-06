@@ -1,14 +1,14 @@
 #!/usr/bin/env python
-# Uses python3 and the pyserial package
 import serial
 import struct
 
-ser = serial.Serial('/dev/ttyACM0', 115200)
-ser.write([10]);
-read_byte = ser.read()
+ser = serial.Serial('/dev/ttyACM1', 115200)
+out = open('data.csv', 'wb')
 
-while read_byte is not None:
-    read_byte = ser.read(12)
-    fields = struct.unpack('Ihhhh', read_byte)
-    print(fields)
+counter = 0
+while counter < 100000:
+    line = ser.readline()
+    out.write(line)
+    counter += 1
 
+out.close()
