@@ -4,7 +4,7 @@ import serial
 import struct
 
 ser = serial.Serial('/dev/ttyACM0', 115200)
-ser.write(10);
+ser.write([10]);
 read_byte = ser.read()
 
 while read_byte is not None:
