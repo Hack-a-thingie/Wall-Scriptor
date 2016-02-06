@@ -4,7 +4,7 @@ Reads the values from a0-a3 and writes them as binary to the serial interface.
 MIT LICENSE 2016
 */
 
-#define N 10
+#define N 128
 
 typedef struct {
 	unsigned long time; // 32bit
