@@ -4,14 +4,13 @@ Reads the values from a0-a3 and writes them as binary to the serial interface.
 MIT LICENSE 2016
 */
 
-struct Data {
+typedef struct {
 	unsigned long time;
 	int a0;
 	int a1;
 	int a2;
 	int a3;
-	int a4;
-};
+} __attribute__((__packed__)) Data;
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -21,7 +20,14 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 // TODO: Loop timing
+
+boolean running = false;
 void loop() {
+  if(!running) {// Wait for serial input
+	  while(!Serial.available());
+	  running = true;
+  };
+  
   // read the input on analog pin 0:
   unsigned long time = micros(); // time since program start.
                                  // Overflows after 40 minutes
