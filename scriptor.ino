@@ -4,6 +4,15 @@ Reads the values from a0-a3 and writes them as binary to the serial interface.
 MIT LICENSE 2016
 */
 
+struct Data {
+	unsigned long time;
+	int a0;
+	int a1;
+	int a2;
+	int a3;
+	int a4;
+};
+
 // the setup routine runs once when you press reset:
 void setup() {
   // initialize serial communication
@@ -24,9 +33,7 @@ void loop() {
   int a2 = analogRead(A2);
   int a3 = analogRead(A3);
 
-  int t0 = (int) (time >> 16);
-  int t1 = (int) (time & 0x0000ffff);
-  int values[7] = {t0, t1, a0, a1, a2, a3, 0xFFFF};
+  Data value = {time, a0, a1, a2, a3};
   // print out the value you read:
-  Serial.write((uint8_t*) &values, 7*sizeof(*values));
+  Serial.write((uint8_t*) &value, sizeof(value));
 }
