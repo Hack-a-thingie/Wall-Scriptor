@@ -32,11 +32,11 @@ void loop() {
   // It takes about 100 microseconds (0.0001 s) to read an analog input,
   // so the maximum reading rate is about 10,000 times a second.
   int a0 = analogRead(A0);
-  int a1 = analogRead(A1);
   int a2 = analogRead(A2);
+  int a4 = analogRead(A4);
   
   // create msg
-  Data msg = {time, a0, a1, a2};
+  Data msg = {time, a0, a2, a4};
   
   if (counter < N) {
 	  MESSAGES[counter] = msg;
