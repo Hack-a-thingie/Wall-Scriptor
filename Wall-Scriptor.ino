@@ -3,8 +3,17 @@ Reads the values from a0-a3 and writes them as binary to the serial interface.
 
 MIT LICENSE 2016
 */
+#define N 128
 
-#define N 64
+#define FASTADC 1
+
+// defines for setting and clearing register bits
+#ifndef cbi
+#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+#endif
+#ifndef sbi
+#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+#endif
 
 typedef struct {
 	unsigned long time; // 32bit
@@ -18,6 +27,14 @@ size_t counter = 0;
 void setup() {
   // initialize serial communication
   Serial.begin(115200); // bits per second
+  
+  #if FASTADC
+ // set prescale to 16
+ sbi(ADCSRA,ADPS2) ;
+ cbi(ADCSRA,ADPS1) ;
+ cbi(ADCSRA,ADPS0) ;
+ #endif
+ 
 }
 
 // the loop routine runs over and over again forever:

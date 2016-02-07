@@ -5,7 +5,7 @@ import signal
 import sys
 
 # Set the number of samples per package
-N =  64
+N =  128
 
 ser = serial.Serial('/dev/ttyACM1', 115200)
 out = open('data.csv', 'w')
