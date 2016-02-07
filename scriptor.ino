@@ -4,13 +4,11 @@ Reads the values from a0-a3 and writes them as binary to the serial interface.
 MIT LICENSE 2016
 */
 
-#define N 128
+#define N 64
 
 typedef struct {
 	unsigned long time; // 32bit
-	int a0; // 16bit
-	int a1;
-	int a2;
+	unsigned long data; // 32bit
 } __attribute__((__packed__)) Data;
 
 Data MESSAGES[N];
@@ -34,9 +32,11 @@ void loop() {
   int a0 = analogRead(A0);
   int a2 = analogRead(A2);
   int a4 = analogRead(A4);
+
+  unsigned long data = (((unsigned long) a0) << 20) | (((unsigned long) a2) << 10) | ((unsigned long) a4);
   
   // create msg
-  Data msg = {time, a0, a2, a4};
+  Data msg = {time, data};
   
   if (counter < N) {
 	  MESSAGES[counter] = msg;
@@ -46,7 +46,7 @@ void loop() {
   // send data over serial
   if (counter == N) {
 	  counter = 0;
-	  Serial.write("SSSSSSSSSS"); // Start tag 32bit zeros
+	  Serial.write("SSSSSSSS"); // Start tag 32bit zeros
 	  Serial.write((uint8_t*) MESSAGES, N*sizeof(*MESSAGES));
   }
 }
