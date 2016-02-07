@@ -20,7 +20,6 @@ size_t counter = 0;
 void setup() {
   // initialize serial communication
   Serial.begin(115200); // bits per second
-  analogReference(INTERNAL);
 }
 
 // the loop routine runs over and over again forever:
